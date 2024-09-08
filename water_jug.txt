@@ -1,0 +1,34 @@
+'
+def gcd(a, b):
+    if b == 0:
+        return a
+    return gcd(b, a % b)
+
+def canMeasureWater(x: int, y: int, z: int) -> bool:
+    if x + y < z:
+        return False
+    if x == z or y == z or x + y == z:
+        return True
+    return z % gcd(x, y) == 0
+
+
+def waterJugProblem(x: int, y: int, z: int) -> int:
+    if x > y:
+        x, y = y, x
+    if z > y:
+        return -1
+    if z == y or z == x or z == x + y:
+        return 1
+    if z % gcd(x, y) != 0:
+        return -1
+    return 2
+
+x = 4
+y = 3
+z = 2
+print(f"Given two jugs of capacity {x} and {y} liters, and a target of {z} liters,")
+if canMeasureWater(x, y, z):
+    print("it is possible to measure the target amount of water.")
+    print(f"The minimum number of steps required to measure {z} liters of water is {waterJugProblem(x, y, z)}.")
+else:
+    print("it is not possible to measure the target amount of water.")

@@ -1,0 +1,66 @@
+import random
+
+def is_safe(board, row, col):
+    """
+    Check if placing a queen at the given position (row, col) is safe.
+    """
+    # Check if there is a queen in the same column
+    for i in range(row):
+        if board[i] == col:
+            return False
+    
+    # Check upper left diagonal
+    for i, j in zip(range(row-1, -1, -1), range(col-1, -1, -1)):
+        if board[i] == j:
+            return False
+    
+    # Check upper right diagonal
+    for i, j in zip(range(row-1, -1, -1), range(col+1, len(board))):
+        if board[i] == j:
+            return False
+    
+    return True
+
+def solve_n_queens_util(board, row):
+    """
+    Recursive utility function to solve the N Queens problem.
+    """
+    if row == len(board):
+        return True
+    
+    # Shuffle the columns to introduce randomness
+    cols = list(range(len(board)))
+    random.shuffle(cols)
+    
+    for col in cols:
+        if is_safe(board, row, col):
+            board[row] = col
+            if solve_n_queens_util(board, row + 1):
+                return True
+            # Backtrack
+            board[row] = -1
+            
+    return False
+
+def solve_n_queens(n):
+    """
+    Solve the N Queens problem for a given board size N.
+    """
+    board = [-1] * n
+    if not solve_n_queens_util(board, 0):
+        print("Solution does not exist")
+        return False
+    
+    print("Solution exists! Here's the board configuration:")
+    for i in range(n):
+        row_str = ""
+        for j in range(n):
+            if board[i] == j:
+                row_str += "Q "
+            else:
+                row_str += ". "
+        print(row_str)
+    return True
+
+# Example usage
+solve_n_queens(8)
